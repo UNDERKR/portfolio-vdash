@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NMS-Portfolio :: Network Operations Center</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Effet Scanlines -->
+    <div class="scanlines"></div>
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon">◉</div>
+            <h2>VFK CONSOLE</h2>
+        </div>
+
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" data-view="dashboard">
+                <span class="nav-icon">▣</span>
+                <span class="nav-label">Dashboard</span>
+            </a>
+            <a href="#" class="nav-item" data-view="triggers">
+                <span class="nav-icon">⚠</span>
+                <span class="nav-label">Expériences Pro</span>
+            </a>
+            <a href="#" class="nav-item" data-view="services">
+                <span class="nav-icon">⚙</span>
+                <span class="nav-label">Services (Compétences)</span>
+            </a>
+            <a href="#" class="nav-item" data-view="parcours">
+                <span class="nav-icon">◷</span>
+                <span class="nav-label">Parcours (Formation)</span>
+            </a>
+            <a href="#" class="nav-item" data-view="interets">
+                <span class="nav-icon">★</span>
+                <span class="nav-label">Centres d'intérêts</span>
+            </a>
+            <a href="#" class="nav-item" data-view="logs">
+                <span class="nav-icon">≡</span>
+                <span class="nav-label">Logs</span>
+            </a>
+            <a href="#" class="nav-item" data-view="contact">
+                <span class="nav-icon">✉</span>
+                <span class="nav-label">Contact (Escalade)</span>
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="footer-stat">
+                <span class="stat-label">UPTIME</span>
+                <span class="stat-value">99.9%</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <div class="main-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-left">
+                <h1 class="header-title">NMS-Portfolio :: <span class="highlight">Félis VIRAMA</span></h1>
+            </div>
+            <div class="header-center">
+                <div class="global-status">
+                    <span class="status-indicator pulse-green"></span>
+                    <span class="status-text">Système Opérationnel</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <div class="live-clock" id="liveClock">00:00:00</div>
+            </div>
+        </header>
+
+        <!-- Content Area -->
+        <main class="content">
+            <!-- DASHBOARD VIEW -->
+            <section class="view active" data-view="dashboard">
+                <div class="view-header">
+                    <h2>Vue d'Ensemble :: Monitoring Principal</h2>
+                </div>
+
+                <div class="widgets-grid">
+                    <!-- Widget Statut Hôte -->
+                    <div class="widget" id="widget-host">
+                        <div class="widget-header">
+                            <h3>STATUT HÔTE</h3>
+                            <span class="status-badge pulse-green">ONLINE</span>
+                        </div>
+                        <div class="widget-content">
+                            <div class="host-info">
+                                <div class="info-row">
+                                    <span class="info-label">Hôte:</span>
+                                    <span class="info-value mono">FÉLIS-VIRAMA-PROD-SRV</span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Statut:</span>
+                                    <span class="info-value">
+                                        <span class="status-indicator pulse-green"></span>
+                                        OPÉRATIONNEL
+                                    </span>
+                                </div>
+                                <div class="info-row">
+                                    <span class="info-label">Uptime:</span>
+                                    <span class="info-value mono">5+ années</span>
+                                </div>
+                                <div class="info-row bio">
+                                    <span class="info-label">Description:</span>
+                                    <p class="info-value">
+                                        Administrateur Systèmes et Réseaux passionné par l'infrastructure,
+                                        l'automatisation et les technologies de monitoring. Expert en solutions
+                                        haute-disponibilité et optimisation de performance.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Widget Charge en temps réel (CPU + RAM) -->
+                    <div class="widget" id="widget-cpu">
+                        <div class="widget-header">
+                            <h3>CHARGE EN TEMPS RÉEL</h3>
+                            <span class="metric-badge">LIVE</span>
+                        </div>
+                        <div class="widget-content">
+                            <div class="live-charts-grid">
+                                <div class="live-chart-container">
+                                    <h4 class="chart-label">CPU Usage</h4>
+                                    <canvas id="cpuChart"></canvas>
+                                </div>
+                                <div class="live-chart-container">
+                                    <h4 class="chart-label">RAM Usage</h4>
+                                    <canvas id="ramChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Widget Expériences Récentes -->
+                    <div class="widget" id="widget-recent">
+                        <div class="widget-header">
+                            <h3>EXPÉRIENCES RÉCENTES</h3>
+                        </div>
+                        <div class="widget-content">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>TYPE</th>
+                                        <th>POSTE</th>
+                                        <th>ENTREPRISE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="trigger-row" data-type="alternance>" data-trigger="1">
+                                        <td><span class="exp-type-badge alternance">ALTERNANCE</span></td>
+                                        <td>Administrateur Système et Réseau</td>
+                                        <td>Saas Partner</td>
+                                    </tr>
+                                    <tr class="trigger-row" data-type="stage" data-trigger="2">
+                                        <td><span class="exp-type-badge stage">STAGE</span></td>
+                                        <td>Administrateur Système et Réseau</td>
+                                        <td>Office de l'eau Réunion</td>
+                                    </tr>
+                                    <tr class="trigger-row" data-type="stage" data-trigger="6">
+                                        <td><span class="exp-type-badge stage">STAGE</span></td>
+                                        <td>Administrateur Système et Réseau</td>
+                                        <td>Infobam OI</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button class="widget-link" onclick="navigateToView('triggers')">
+                                <span>Voir toutes les expériences</span>
+                                <span class="link-arrow">→</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Widget Répartition Services -->
+                    <div class="widget" id="widget-services">
+                        <div class="widget-header">
+                            <h3>RÉPARTITION DES SERVICES</h3>
+                        </div>
+                        <div class="widget-content">
+                            <canvas id="servicesChart"></canvas>
+                            <button class="widget-link" onclick="navigateToView('services')">
+                                <span>Voir toutes les compétences</span>
+                                <span class="link-arrow">→</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Widget Centres d'Intérêts -->
+                    <div class="widget" id="widget-interests">
+                        <div class="widget-header">
+                            <h3>CENTRES D'INTÉRÊTS</h3>
+                            <span class="metric-badge">TOP 3</span>
+                        </div>
+                        <div class="widget-content">
+                            <div class="interests-preview">
+                                <div class="interest-preview-item">
+                                    <div class="preview-icon tech-mini">⚡</div>
+                                    <div class="preview-content">
+                                        <h4 class="preview-title">Technologies & Innovation</h4>
+                                        <div class="preview-bar">
+                                            <div class="preview-fill" style="width: 95%"></div>
+                                        </div>
+                                        <span class="preview-label">95% d'engagement</span>
+                                    </div>
+                                </div>
+
+                                <div class="interest-preview-item">
+                                    <div class="preview-icon learning-mini">📚</div>
+                                    <div class="preview-content">
+                                        <h4 class="preview-title">Apprentissage Continu</h4>
+                                        <div class="preview-bar">
+                                            <div class="preview-fill" style="width: 90%"></div>
+                                        </div>
+                                        <span class="preview-label">90% d'engagement</span>
+                                    </div>
+                                </div>
+
+                                <div class="interest-preview-item">
+                                    <div class="preview-icon homelab-mini">🏠</div>
+                                    <div class="preview-content">
+                                        <h4 class="preview-title">Homelab & Domotique</h4>
+                                        <div class="preview-bar">
+                                            <div class="preview-fill" style="width: 88%"></div>
+                                        </div>
+                                        <span class="preview-label">88% d'engagement</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="widget-link" onclick="navigateToView('interets')">
+                                <span>Voir tous les centres d'intérêts</span>
+                                <span class="link-arrow">→</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- EXPERIENCES VIEW -->
+            <section class="view" data-view="triggers">
+                <div class="view-header">
+                    <h2>Expériences Professionnelles :: Historique Complet</h2>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">Tous</button>
+                        <button class="filter-btn" data-filter="stage">Stages</button>
+                        <button class="filter-btn" data-filter="alternance">Alternances</button>
+                        <!-- <button class="filter-btn" data-filter="projet">Projets</button> -->
+                    </div>
+                </div>
+
+                <div class="triggers-container">
+                    <table class="data-table triggers-table">
+                        <thead>
+                            <tr>
+                                <th>TYPE</th>
+                                <th>DATE</th>
+                                <th>ENTREPRISE / POSTE</th>
+                                <th>MISSION / CONTEXTE</th>
+                                <th>STATUT</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="trigger-row" data-type="alternance" data-trigger="1">
+                                <td><span class="exp-type-badge alternance">ALTERNANCE</span></td>
+                                <td class="mono">Sept 2024 - Aujourd'hui</td>
+                                <td><strong>Saas Partner</strong><br><small>Administrateur Système et Réseau</small></td>
+                                <td>Administration IT</td>
+                                <td><span class="status-badge orange">EN COURS</span></td>
+                            </tr>
+                            <tr class="trigger-row" data-type="stage" data-trigger="2">
+                                <td><span class="exp-type-badge stage">STAGE</span></td>
+                                <td class="mono">Janvier - Février 2024</td>
+                                <td><strong>Office de l'eau Réunion</strong><br><small>Stagiaire Administrateur Système et Réseau</small></td>
+                                <td>Serveur de développement</td>
+                                <td><span class="status-badge green">TERMINÉ</span></td>
+                            </tr>
+                            <tr class="trigger-row" data-type="stage" data-trigger="6">
+                                <td><span class="exp-type-badge stage">STAGE</span></td>
+                                <td class="mono">Juin - Juillet 2023</td>
+                                <td><strong>Infobam OI</strong><br><small>Stagiaire Administrateur Système et Réseau</small></td>
+                                <td>Support IT et Audit</td>
+                                <td><span class="status-badge green">TERMINÉ</span></td>
+                            </tr>
+                            <tr class="trigger-row" data-type="stage" data-trigger="8">
+                                <td><span class="exp-type-badge stage">STAGE</span></td>
+                                <td class="mono">Mars 2022</td>
+                                <td><strong>WattElek</strong><br><small>Stagiaire Administrateur Système et Réseau</small></td>
+                                <td>Électricité du bâtiment</td>
+                                <td><span class="status-badge green">TERMINÉ</span></td>
+                            </tr>
+                            <tr class="trigger-row" data-type="stage" data-trigger="3">
+                                <td><span class="exp-type-badge stage">STAGE</span></td>
+                                <td class="mono">Avril & Septembre 2021</td>
+                                <td><strong>Vindemia Services</strong><br><small>Consultant Infrastructure</small></td>
+                                <td>Support IT et Maintenance</td>
+                                <td><span class="status-badge green">TERMINÉ</span></td>
+                            </tr>
+                            <tr class="trigger-row" data-type="stage" data-trigger="8">
+                                <td><span class="exp-type-badge stage">STAGE</span></td>
+                                <td class="mono">Décembre 2020</td>
+                                <td><strong>WattElek</strong><br><small>Stagiaire Administrateur Système et Réseau</small></td>
+                                <td>Électricité du bâtiment</td>
+                                <td><span class="status-badge green">TERMINÉ</span></td>
+                            </tr>
+                            <tr class="trigger-row" data-type="stage" data-trigger="4">
+                                <td><span class="exp-type-badge stage">STAGE</span></td>
+                                <td class="mono">Décembre 2019</td>
+                                <td><strong>Zot Informatik</strong><br><small>Consultant Cybersécurité</small></td>
+                                <td>Maintenance et S.A.V</td>
+                                <td><span class="status-badge green">TERMINÉ</span></td>
+                            </tr>
+                            <tr class="trigger-row" data-type="stage" data-trigger="5">
+                                <td><span class="exp-type-badge stage">STAGE</span></td>
+                                <td class="mono">Mars 2018</td>
+                                <td><strong>SOS Technique Informatique</strong><br><small>Portfolio Developer</small></td>
+                                <td>Support IT et S.A.V</td>
+                                <td><span class="status-badge green">TERMINÉ</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- SERVICES VIEW -->
+            <section class="view" data-view="services">
+                <div class="view-header">
+                    <h2>Statut des Services :: Compétences</h2>
+                </div>
+
+                <div class="services-grid">
+                    <!-- Service Réseaux -->
+                    <div class="service-card">
+                        <div class="service-header">
+                            <h3>SERVICE: RÉSEAUX</h3>
+                            <span class="status-indicator pulse-green"></span>
+                        </div>
+                        <div class="service-status">
+                            <span class="status-badge green">OK</span>
+                        </div>
+                        <div class="service-metrics">
+                            <span class="metric-label">Maîtrise</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 90%"></div>
+                            </div>
+                            <span class="metric-value">90%</span>
+                        </div>
+                        <div class="service-tags">
+                            <span class="tech-tag">Cisco</span>
+                            <span class="tech-tag">pfSense</span>
+                            <span class="tech-tag">BGP</span>
+                            <span class="tech-tag">OSPF</span>
+                            <span class="tech-tag">VPN</span>
+                            <span class="tech-tag">VLAN</span>
+                            <span class="tech-tag">Wireshark</span>
+                        </div>
+                    </div>
+
+                    <!-- Service Systèmes -->
+                    <div class="service-card">
+                        <div class="service-header">
+                            <h3>SERVICE: SYSTÈMES</h3>
+                            <span class="status-indicator pulse-green"></span>
+                        </div>
+                        <div class="service-status">
+                            <span class="status-badge green">OK</span>
+                        </div>
+                        <div class="service-metrics">
+                            <span class="metric-label">Maîtrise</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 95%"></div>
+                            </div>
+                            <span class="metric-value">95%</span>
+                        </div>
+                        <div class="service-tags">
+                            <span class="tech-tag">Linux</span>
+                            <span class="tech-tag">Debian</span>
+                            <span class="tech-tag">RHEL</span>
+                            <span class="tech-tag">Windows Server</span>
+                            <span class="tech-tag">Bash</span>
+                            <span class="tech-tag">PowerShell</span>
+                            <span class="tech-tag">Systemd</span>
+                        </div>
+                    </div>
+
+                    <!-- Service Cloud & DevOps -->
+                    <div class="service-card">
+                        <div class="service-header">
+                            <h3>SERVICE: CLOUD & DEVOPS</h3>
+                            <span class="status-indicator pulse-green"></span>
+                        </div>
+                        <div class="service-status">
+                            <span class="status-badge green">OK</span>
+                        </div>
+                        <div class="service-metrics">
+                            <span class="metric-label">Maîtrise</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 85%"></div>
+                            </div>
+                            <span class="metric-value">85%</span>
+                        </div>
+                        <div class="service-tags">
+                            <span class="tech-tag">AWS</span>
+                            <span class="tech-tag">Azure</span>
+                            <span class="tech-tag">Docker</span>
+                            <span class="tech-tag">Kubernetes</span>
+                            <span class="tech-tag">Ansible</span>
+                            <span class="tech-tag">Terraform</span>
+                            <span class="tech-tag">GitLab CI</span>
+                        </div>
+                    </div>
+
+                    <!-- Service Monitoring -->
+                    <div class="service-card">
+                        <div class="service-header">
+                            <h3>SERVICE: MONITORING</h3>
+                            <span class="status-indicator pulse-green"></span>
+                        </div>
+                        <div class="service-status">
+                            <span class="status-badge green">OK</span>
+                        </div>
+                        <div class="service-metrics">
+                            <span class="metric-label">Maîtrise</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 88%"></div>
+                            </div>
+                            <span class="metric-value">88%</span>
+                        </div>
+                        <div class="service-tags">
+                            <span class="tech-tag">Prometheus</span>
+                            <span class="tech-tag">Grafana</span>
+                            <span class="tech-tag">ELK Stack</span>
+                            <span class="tech-tag">Nagios</span>
+                            <span class="tech-tag">Zabbix</span>
+                            <span class="tech-tag">Datadog</span>
+                        </div>
+                    </div>
+
+                    <!-- Service Sécurité -->
+                    <div class="service-card">
+                        <div class="service-header">
+                            <h3>SERVICE: SÉCURITÉ</h3>
+                            <span class="status-indicator pulse-green"></span>
+                        </div>
+                        <div class="service-status">
+                            <span class="status-badge green">OK</span>
+                        </div>
+                        <div class="service-metrics">
+                            <span class="metric-label">Maîtrise</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%"></div>
+                            </div>
+                            <span class="metric-value">80%</span>
+                        </div>
+                        <div class="service-tags">
+                            <span class="tech-tag">Firewall</span>
+                            <span class="tech-tag">IDS/IPS</span>
+                            <span class="tech-tag">SSL/TLS</span>
+                            <span class="tech-tag">VPN</span>
+                            <span class="tech-tag">Fail2ban</span>
+                            <span class="tech-tag">Hardening</span>
+                        </div>
+                    </div>
+
+                    <!-- Service Base de Données -->
+                    <div class="service-card">
+                        <div class="service-header">
+                            <h3>SERVICE: BASES DE DONNÉES</h3>
+                            <span class="status-indicator pulse-green"></span>
+                        </div>
+                        <div class="service-status">
+                            <span class="status-badge green">OK</span>
+                        </div>
+                        <div class="service-metrics">
+                            <span class="metric-label">Maîtrise</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 82%"></div>
+                            </div>
+                            <span class="metric-value">82%</span>
+                        </div>
+                        <div class="service-tags">
+                            <span class="tech-tag">MySQL</span>
+                            <span class="tech-tag">PostgreSQL</span>
+                            <span class="tech-tag">MongoDB</span>
+                            <span class="tech-tag">Redis</span>
+                            <span class="tech-tag">Backup/Recovery</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PARCOURS VIEW -->
+            <section class="view" data-view="parcours">
+                <div class="view-header">
+                    <h2>Parcours :: Timeline de Formation</h2>
+                    <div class="timeline-stats">
+                        <span class="stat-item">
+                            <span class="stat-label">TOTAL ANNÉES:</span>
+                            <span class="stat-value mono">10+</span>
+                        </span>
+                        <span class="stat-item">
+                            <span class="stat-label">CERTIFICATIONS:</span>
+                            <span class="stat-value mono">5</span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="timeline-container">
+                    <!-- Event 1 - Formation Récente -->
+                    <div class="timeline-event">
+                        <div class="timeline-marker">
+                            <span class="marker-dot pulse-green"></span>
+                            <div class="marker-line"></div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-badge current">EN COURS</div>
+                            <div class="timeline-date mono">2024 - Présent</div>
+                            <h3 class="timeline-title">Maîtrise - Administrateur Système et Réseau</h3>
+                            <p class="timeline-institution">
+                                <span class="institution-icon">🏢</span>
+                                Expernet Campus Informatique
+                            </p>
+                            <p class="timeline-description">
+                                Préparation de la certification AWS Solutions Architect - Professional.
+                                Architecture cloud avancée, haute disponibilité, et optimisation des coûts.
+                            </p>
+                            <div class="timeline-tags">
+                                <span class="tech-tag">AWS</span>
+                                <span class="tech-tag">Cloud Architecture</span>
+                                <span class="tech-tag">Infrastructure</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event 2 - Certification -->
+                    <div class="timeline-event">
+                        <div class="timeline-marker">
+                            <span class="marker-dot pulse-blue"></span>
+                            <div class="marker-line"></div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-badge completed">COMPLÉTÉ</div>
+                            <div class="timeline-date mono">2022 - 2024</div>
+                            <h3 class="timeline-title">BTS SIO - Solutions d'Infrastructure Systèmes et Réseaux</h3>
+                            <p class="timeline-institution">
+                                <span class="institution-icon">🏢</span>
+                                Lycée Marguerite Jauzelon
+                            </p>
+                            <p class="timeline-description">
+                                Certification officielle Kubernetes - Gestion d'infrastructures containerisées,
+                                déploiements, scaling, et troubleshooting de clusters Kubernetes en production.
+                            </p>
+                            <div class="timeline-tags">
+                                <span class="tech-tag">Kubernetes</span>
+                                <span class="tech-tag">Docker</span>
+                                <span class="tech-tag">Orchestration</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Event 3 - Formation Technique -->
+                    <div class="timeline-event">
+                        <div class="timeline-marker">
+                            <span class="marker-dot pulse-blue"></span>
+                            <div class="marker-line"></div>
+                        </div>
+                        <div class="timeline-content">
+                            <div class="timeline-badge completed">COMPLÉTÉ</div>
+                            <div class="timeline-date mono">2019 - 2022</div>
+                            <h3 class="timeline-title">BAC PRO SN - Réseaux Informatique et Systèmes Communicants</h3>
+                            <p class="timeline-institution">
+                                <span class="institution-icon">🎓</span>
+                                Lycée Paule Pignolet de Fresne Rivière
+                            </p>
+                            <p class="timeline-description">
+                                Spécialisation en administration systèmes et réseaux. Projets incluant
+                                l'automatisation d'infrastructure, la virtualisation, et la sécurité réseau.
+                            </p>
+                            <div class="timeline-tags">
+                                <span class="tech-tag">Linux</span>
+                                <span class="tech-tag">Réseaux</span>
+                                <span class="tech-tag">Virtualisation</span>
+                                <span class="tech-tag">Sécurité</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Timeline End Marker -->
+                    <div class="timeline-end">
+                        <span class="end-icon">◉</span>
+                        <span class="end-text">DÉBUT DU PARCOURS</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CENTRES D'INTERETS VIEW -->
+            <section class="view" data-view="interets">
+                <div class="view-header">
+                    <h2>Centres d'Intérêts :: Activités & Passions</h2>
+                </div>
+
+                <div class="interests-grid">
+                    <!-- Intérêt 1: Technologies -->
+                    <div class="interest-card">
+                        <div class="interest-icon tech">⚡</div>
+                        <div class="interest-content">
+                            <h3 class="interest-title">Technologies & Innovation</h3>
+                            <p class="interest-description">
+                                Veille technologique active sur les dernières innovations en infrastructure cloud,
+                                DevOps et cybersécurité. Participation à des conférences et meetups tech.
+                            </p>
+                            <div class="interest-tags">
+                                <span class="interest-tag">Cloud Computing</span>
+                                <span class="interest-tag">DevOps</span>
+                                <span class="interest-tag">IA & ML</span>
+                                <span class="interest-tag">Blockchain</span>
+                            </div>
+                            <div class="interest-stats">
+                                <div class="stat">
+                                    <span class="stat-label">Niveau d'engagement</span>
+                                    <div class="stat-bar">
+                                        <div class="stat-fill" style="width: 95%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intérêt 2: Open Source -->
+                    <div class="interest-card">
+                        <div class="interest-icon opensource">◉</div>
+                        <div class="interest-content">
+                            <h3 class="interest-title">Contribution Open Source</h3>
+                            <p class="interest-description">
+                                Contribution active à des projets open source, partage de scripts d'automatisation
+                                et documentation de solutions d'infrastructure sur GitHub.
+                            </p>
+                            <div class="interest-tags">
+                                <span class="interest-tag">GitHub</span>
+                                <span class="interest-tag">Automation</span>
+                                <span class="interest-tag">Documentation</span>
+                                <span class="interest-tag">Scripts</span>
+                            </div>
+                            <div class="interest-stats">
+                                <div class="stat">
+                                    <span class="stat-label">Niveau d'engagement</span>
+                                    <div class="stat-bar">
+                                        <div class="stat-fill" style="width: 85%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intérêt 3: Cybersécurité -->
+                    <div class="interest-card">
+                        <div class="interest-icon security">🛡</div>
+                        <div class="interest-content">
+                            <h3 class="interest-title">Cybersécurité & Ethical Hacking</h3>
+                            <p class="interest-description">
+                                Pratique régulière sur des plateformes CTF (Capture The Flag), exploration des
+                                vulnérabilités et techniques de pentest. Apprentissage continu en sécurité offensive et défensive.
+                            </p>
+                            <div class="interest-tags">
+                                <span class="interest-tag">CTF</span>
+                                <span class="interest-tag">Pentesting</span>
+                                <span class="interest-tag">HackTheBox</span>
+                                <span class="interest-tag">TryHackMe</span>
+                            </div>
+                            <div class="interest-stats">
+                                <div class="stat">
+                                    <span class="stat-label">Niveau d'engagement</span>
+                                    <div class="stat-bar">
+                                        <div class="stat-fill" style="width: 80%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intérêt 4: Gaming & Tech -->
+                    <div class="interest-card">
+                        <div class="interest-icon gaming">🎮</div>
+                        <div class="interest-content">
+                            <h3 class="interest-title">Gaming & Hardware</h3>
+                            <p class="interest-description">
+                                Passionné de jeux vidéo (stratégie, FPS) et de hardware. Montage et optimisation
+                                de PC gaming, overclocking et benchmarking.
+                            </p>
+                            <div class="interest-tags">
+                                <span class="interest-tag">PC Building</span>
+                                <span class="interest-tag">Overclocking</span>
+                                <span class="interest-tag">Gaming</span>
+                                <span class="interest-tag">Hardware</span>
+                            </div>
+                            <div class="interest-stats">
+                                <div class="stat">
+                                    <span class="stat-label">Niveau d'engagement</span>
+                                    <div class="stat-bar">
+                                        <div class="stat-fill" style="width: 75%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intérêt 5: Domotique -->
+                    <div class="interest-card">
+                        <div class="interest-icon homelab">🏠</div>
+                        <div class="interest-content">
+                            <h3 class="interest-title">Homelab & Domotique</h3>
+                            <p class="interest-description">
+                                Mise en place d'un homelab personnel avec serveurs, virtualisation, stockage NAS
+                                et automatisation domotique (Home Assistant, IoT).
+                            </p>
+                            <div class="interest-tags">
+                                <span class="interest-tag">Homelab</span>
+                                <span class="interest-tag">Proxmox</span>
+                                <span class="interest-tag">Home Assistant</span>
+                                <span class="interest-tag">IoT</span>
+                            </div>
+                            <div class="interest-stats">
+                                <div class="stat">
+                                    <span class="stat-label">Niveau d'engagement</span>
+                                    <div class="stat-bar">
+                                        <div class="stat-fill" style="width: 88%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Intérêt 6: Apprentissage Continu -->
+                    <div class="interest-card">
+                        <div class="interest-icon learning">📚</div>
+                        <div class="interest-content">
+                            <h3 class="interest-title">Apprentissage Continu & Certifications</h3>
+                            <p class="interest-description">
+                                Formation continue via plateformes en ligne, préparation de certifications
+                                professionnelles (AWS, Azure, Linux). Lecture de blogs techniques et documentation.
+                            </p>
+                            <div class="interest-tags">
+                                <span class="interest-tag">Udemy</span>
+                                <span class="interest-tag">Coursera</span>
+                                <span class="interest-tag">Certifications</span>
+                                <span class="interest-tag">E-learning</span>
+                            </div>
+                            <div class="interest-stats">
+                                <div class="stat">
+                                    <span class="stat-label">Niveau d'engagement</span>
+                                    <div class="stat-bar">
+                                        <div class="stat-fill" style="width: 90%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- LOGS VIEW -->
+            <section class="view" data-view="logs">
+                <div class="view-header">
+                    <h2 class="mono">tail -f /var/log/portfolio.log</h2>
+                    <button class="control-btn" id="pauseLogsBtn">
+                        <span id="pauseIcon">❚❚</span> PAUSE
+                    </button>
+                </div>
+
+                <div class="terminal-container">
+                    <div class="terminal-content" id="logsContainer">
+                        <div class="log-line info">[INFO] 2025-11-05 10:00:00 :: system_boot: initializing nms-portfolio v2.0</div>
+                        <div class="log-line info">[INFO] 2025-11-05 10:00:01 :: service_reseau: status check... OK</div>
+                        <div class="log-line info">[INFO] 2025-11-05 10:00:02 :: service_systeme: status check... OK</div>
+                        <div class="log-line info">[INFO] 2025-11-05 10:00:03 :: service_cloud: status check... OK</div>
+                        <div class="log-line success">[SUCCESS] 2025-11-05 10:00:04 :: all_services: operational</div>
+                        <div class="log-line info">[INFO] 2025-11-05 10:00:05 :: monitoring_engine: starting live data stream</div>
+                        <div class="log-line info">[INFO] 2025-11-05 10:00:06 :: dashboard: rendering widgets...</div>
+                        <div class="log-line success">[SUCCESS] 2025-11-05 10:00:07 :: dashboard: ready</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONTACT VIEW -->
+            <section class="view" data-view="contact">
+                <div class="view-header">
+                    <h2>Procédure d'Escalade et Contact</h2>
+                </div>
+
+                <div class="escalation-grid">
+                    <!-- Niveau 1 -->
+                    <div class="escalation-card level-1">
+                        <div class="escalation-header">
+                            <div class="escalation-level">
+                                <span class="level-icon blue">1</span>
+                                <h3>NIVEAU 1 :: INFO</h3>
+                            </div>
+                            <span class="status-indicator pulse-blue"></span>
+                        </div>
+                        <div class="escalation-content">
+                            <p class="escalation-desc">
+                                Pour toute demande d'information générale ou question technique.
+                            </p>
+                            <div class="contact-method">
+                                <span class="method-label">EMAIL</span>
+                                <a href="mailto:felis.virama@undercore.re" class="contact-link">
+                                    <span class="link-icon">✉</span>
+                                    Ouvrir un ticket
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Niveau 2 -->
+                    <div class="escalation-card level-2">
+                        <div class="escalation-header">
+                            <div class="escalation-level">
+                                <span class="level-icon orange">2</span>
+                                <h3>NIVEAU 2 :: WARNING</h3>
+                            </div>
+                            <span class="status-indicator pulse-orange"></span>
+                        </div>
+                        <div class="escalation-content">
+                            <p class="escalation-desc">
+                                Pour consulter le profil professionnel et établir un contact réseau.
+                            </p>
+                            <div class="contact-method">
+                                <span class="method-label">LINKEDIN</span>
+                                <a href="https://re.linkedin.com/in/f%C3%A9lis-virama-319714226" target="_blank" class="contact-link">
+                                    <span class="link-icon">⧉</span>
+                                    Consulter le profil de l'hôte
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Niveau 3 -->
+                    <div class="escalation-card level-3">
+                        <div class="escalation-header">
+                            <div class="escalation-level">
+                                <span class="level-icon red">3</span>
+                                <h3>NIVEAU 3 :: CRITICAL</h3>
+                            </div>
+                            <span class="status-indicator pulse-red"></span>
+                        </div>
+                        <div class="escalation-content">
+                            <p class="escalation-desc">
+                                Pour accéder au rapport d'intervention complet (CV détaillé).
+                            </p>
+                            <div class="contact-method">
+                                <span class="method-label">CV.PDF</span>
+                                <a href="./cv.pdf" download class="contact-link critical">
+                                    <span class="link-icon">⬇</span>
+                                    Télécharger le rapport complet
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GitHub -->
+                    <div class="escalation-card level-special">
+                        <div class="escalation-header">
+                            <div class="escalation-level">
+                                <span class="level-icon purple">◉</span>
+                                <h3>REPOSITORY :: CODE SOURCE</h3>
+                            </div>
+                            <span class="status-indicator pulse-purple"></span>
+                        </div>
+                        <div class="escalation-content">
+                            <p class="escalation-desc">
+                                Accéder au code source et aux projets open-source.
+                            </p>
+                            <div class="contact-method">
+                                <span class="method-label">GITHUB</span>
+                                <a href="https://github.com/votre-username" target="_blank" class="contact-link">
+                                    <span class="link-icon">⧉</span>
+                                    Explorer les repositories
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Drawer pour détails des Triggers -->
+    <div class="drawer" id="triggerDrawer">
+        <div class="drawer-overlay"></div>
+        <div class="drawer-content">
+            <div class="drawer-header">
+                <h2 id="drawerTitle">Détails du Trigger</h2>
+                <button class="drawer-close" id="closeDrawer">✕</button>
+            </div>
+            <div class="drawer-body" id="drawerBody">
+                <!-- Contenu dynamique -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.js"></script>
+    <!-- GSAP -->
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.4/dist/gsap.min.js"></script>
+    <!-- Script principal -->
+    <script src="script.js"></script>
+</body>
+</html>
