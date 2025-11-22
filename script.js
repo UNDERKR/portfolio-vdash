@@ -1,4 +1,9 @@
 // ============================================
+// IMPORTS
+// ============================================
+import { TRIGGER_DETAILS, LOG_MESSAGES, USER_INFO, TERMINAL_COMMANDS } from './data.js';
+
+// ============================================
 // CONFIGURATION & ÉTAT GLOBAL
 // ============================================
 
@@ -10,226 +15,10 @@ const AppState = {
     logsPaused: false,
     cpuChart: null,
     ramChart: null,
-    servicesChart: null
+    servicesChart: null,
+    terminalHistory: [],
+    terminalHistoryIndex: -1
 };
-
-// Données des projets pour le drawer
-const TRIGGER_DETAILS = {
-    1: {
-        title: "Administrateur Système et Réseau - Modernisation et sécurisation de l'infrastructure",
-        experienceType: "Alternance",
-        role: "Administrateur Système et Réseau",
-        location: "Saas Partner - La Possession",
-        // duration: "Alternance",
-        sector: "Infrastructure Saas",
-        team: "Équipe de 3 personnes",
-        client: null,
-        problem: "Les déploiements manuels étaient lents, source d'erreurs et nécessitaient l'intervention d'un administrateur pour chaque mise en production. L'absence de tests automatisés augmentait les risques.",
-        solution: "Mise en place d'un pipeline CI/CD complet avec GitLab CI et Ansible. Automatisation des tests unitaires, d'intégration et de déploiement. Mise en place de rollback automatique en cas d'échec.",
-        technologies: ["Windows Server", "Windows", "VPN", "Team Viewer", "Synology", "Hyper-V", "RDS", "AD-DS"],
-        results: [
-            "Réduction du temps de déploiement de 2h à 10 minutes",
-            "Diminution de 85% des incidents liés aux déploiements",
-            "Augmentation de la fréquence de déploiement (hebdomadaire → quotidien)",
-            "Amélioration de la qualité du code grâce aux tests automatisés"
-        ],
-        date: "Septembre 2024 - Aujourd'hui",
-        status: "EN COURS",
-        severity: "HIGH",
-        github: "https://github.com/votre-username/cicd-pipeline",
-        live: null
-    },
-    2: {
-        title: "Stagiaire Administrateur Système et Réseau - Mise en place d'un serveur de développement",
-        experienceType: "Stage",
-        role: "Stagiaire Administrateur Systèmes & Réseaux",
-        location: "Office de l'eau Réunion - La Plaine Saint-Paul",
-        // duration: "1 mois",
-        sector: "SaaS / Cloud Computing",
-        team: "Collaboration avec 2 SRE et 1 architecte cloud",
-        client: null,
-        problem: "L'infrastructure traditionnelle (VMs) ne permettait pas de scaling efficace. Les coûts étaient élevés et la gestion complexe. Absence de haute disponibilité.",
-        solution: "Migration complète vers Kubernetes avec déploiement multi-zone. Mise en place d'auto-scaling horizontal et vertical, load balancing intelligent, et gestion des secrets avec Vault.",
-        technologies: ["Debian", "Symfony", "Docker", "PostgreSQL", "PostGIS", "Geoserver", "PHP", "Git"],
-        results: [
-            "Réduction des coûts d'infrastructure de 40%",
-            "Haute disponibilité : 99.95% d'uptime",
-            "Auto-scaling : réponse aux pics de charge en <2 minutes",
-            "Déploiements zero-downtime"
-        ],
-        date: "Juillet 2024",
-        status: "RESOLVED",
-        severity: "HIGH",
-        github: "https://github.com/votre-username/k8s-infra",
-        live: null
-    },
-    3: {
-        title: "Consultant Infrastructure - Monitoring Centralisé",
-        experienceType: "Stage",
-        role: "Consultant Infrastructure",
-        location: "Vindemia Services - Le Port",
-        // duration: "3 mois",
-        sector: "Services Numériques / ESN",
-        team: "Solo (avec support ponctuel équipe infra)",
-        client: "Groupe BanquePlus (secteur bancaire)",
-        problem: "Absence de visibilité sur l'état de l'infrastructure. Détection tardive des incidents. Pas de métriques historiques pour l'optimisation.",
-        solution: "Déploiement d'une stack de monitoring complète avec Prometheus pour les métriques, Grafana pour la visualisation, et AlertManager pour les alertes. Intégration avec PagerDuty pour l'escalade.",
-        technologies: ["Clonezilla", "StageNow   ", "AlertManager", "ELK Stack", "PagerDuty", "Node Exporter"],
-        results: [
-            "Visibilité temps réel sur 100% de l'infrastructure",
-            "Réduction du MTTR (Mean Time To Repair) de 70%",
-            "15+ dashboards personnalisés pour différentes équipes",
-            "Alerting intelligent avec 95% de réduction des faux positifs"
-        ],
-        date: "Mai 2024",
-        status: "RESOLVED",
-        severity: "MEDIUM",
-        github: "https://github.com/votre-username/monitoring-stack",
-        live: null
-    },
-    4: {
-        title: "Consultant Cybersécurité - pfSense & VPN",
-        experienceType: "Stage",
-        role: "Consultant Cybersécurité",
-        location: "Zot Informatik - Saint-Leu",
-        // duration: "2 mois",
-        sector: "Cybersécurité / Conseil",
-        team: "Binôme avec 1 expert sécurité réseau",
-        client: "IndustrieTech SA (secteur industriel)",
-        problem: "La sécurité réseau était insuffisante avec des règles de firewall mal organisées. Pas de VPN sécurisé entre les différents sites de l'entreprise.",
-        solution: "Déploiement de pfSense en haute disponibilité (CARP). Configuration de VPN IPsec site-to-site, segmentation réseau avec VLANs, IDS/IPS avec Suricata, et analyse du trafic avec pfBlockerNG.",
-        technologies: ["pfSense", "IPsec VPN", "OpenVPN", "Suricata", "pfBlockerNG", "VLAN"],
-        results: [
-            "Sécurisation de 5 sites distants avec VPN chiffré",
-            "Blocage de 10000+ menaces par mois grâce à l'IDS",
-            "Segmentation réseau complète (DMZ, LAN, WAN)",
-            "Haute disponibilité avec failover automatique <30s"
-        ],
-        date: "Mars 2024",
-        status: "RESOLVED",
-        severity: "HIGH",
-        github: null,
-        live: null
-    },
-    5: {
-        title: "Portfolio Developer - Dashboard NMS/NOC",
-        experienceType: "Stage",
-        role: "Portfolio Developer",
-        location: "SOS Technique Informatique - Saline les hauts",
-        // duration: "En cours (1 mois actif)",
-        sector: "Développement Web / Portfolio",
-        team: "Solo",
-        client: null,
-        problem: "Les portfolios traditionnels sont statiques et peu engageants. Ils ne reflètent pas les compétences techniques ni la créativité de l'administrateur.",
-        solution: "Création d'un portfolio sous forme de dashboard NOC (Network Operations Center) immersif avec simulations de données en temps réel, animations avancées et storytelling.",
-        technologies: ["HTML5", "CSS3", "JavaScript ES6+", "Chart.js", "GSAP", "Responsive Design"],
-        results: [
-            "Expérience utilisateur immersive et mémorable",
-            "Démonstration concrète des compétences techniques",
-            "Différenciation par rapport aux portfolios classiques",
-            "Projet en cours de développement"
-        ],
-        date: "Novembre 2025",
-        status: "IN PROGRESS",
-        severity: "LOW",
-        github: "https://github.com/votre-username/portfolio-noc",
-        live: "./index.html"
-    },
-    6: {
-        title: "Stagiaire Admin Sys/Réseau - Refonte Infrastructure",
-        experienceType: "Stage",
-        role: "Stagiaire Administrateur Systèmes & Réseaux",
-        location: "Infobam OI - Savannah",
-        // duration: "6 mois (Janvier - Juin 2023)",
-        sector: "Services Cloud / Data Management",
-        team: "Équipe Infrastructure de 4 personnes + 1 tuteur",
-        client: null,
-        problem: "L'infrastructure réseau de l'entreprise était vieillissante avec un équipement Cisco obsolète, des configurations non documentées et des performances dégradées. Besoin de modernisation complète.",
-        solution: "Audit complet de l'infrastructure existante, documentation détaillée, conception d'une nouvelle architecture réseau avec des switchs Cisco Catalyst moderne, implémentation de VLANs pour la segmentation, et mise en place d'outils de monitoring (Zabbix).",
-        technologies: ["UMRA", "Windows", "Audit de sécurité", "Gestion de parc", "Zabbix", "pfSense", "Documentation réseau", "Wireshark"],
-        results: [
-            "Assistance technique (matériel, logiciels, connectivité)",
-            "Administration Active Directory (UMRA)",
-            "Maintenance équipements",
-            "Audit de sécurité réseau",
-            "Support utilisateur"
-        ],
-        date: "Janvier - Juin 2023",
-        status: "RESOLVED",
-        severity: "MEDIUM",
-        github: null,
-        live: null
-    },
-    // 7: {
-    //     title: "Stagiaire Sécurité Réseau - Audit & Hardening",
-    //     experienceType: "Stage",
-    //     role: "Stagiaire Sécurité Réseau",
-    //     location: "NetSecure Systems - Lyon",
-    //     duration: "4 mois (Avril - Juillet 2022)",
-    //     sector: "Cybersécurité / Audit",
-    //     team: "Binôme avec 1 pentester senior",
-    //     client: "Clients PME (secteur industriel et tertiaire)",
-    //     problem: "Les clients PME manquaient de visibilité sur leur niveau de sécurité réseau et système. Beaucoup de serveurs présentaient des vulnérabilités critiques dues à des configurations par défaut non sécurisées.",
-    //     solution: "Réalisation d'audits de sécurité pour 8 clients PME : scan de vulnérabilités avec Nessus, analyse des configurations, hardening des serveurs Linux et Windows selon les bonnes pratiques (CIS Benchmarks), mise en place de pare-feu et de politiques de sécurité.",
-    //     technologies: ["Nessus", "OpenVAS", "Nmap", "Metasploit", "Linux Hardening", "Windows Hardening", "iptables", "SELinux", "CIS Benchmarks"],
-    //     results: [
-    //         "8 audits de sécurité complets réalisés",
-    //         "150+ vulnérabilités critiques corrigées",
-    //         "Rédaction de 8 rapports d'audit détaillés",
-    //         "Hardening de 35+ serveurs (Linux et Windows)",
-    //         "Formation des équipes IT clients aux bonnes pratiques de sécurité"
-    //     ],
-    //     date: "Avril - Juillet 2022",
-    //     status: "RESOLVED",
-    //     severity: "HIGH",
-    //     github: null,
-    //     live: null
-    // },
-    8: {
-        title: "Stagiaire Sécurité Réseau - Audit & Hardening",
-        experienceType: "Stage",
-        role: "Stagiaire Sécurité Réseau",
-        location: "WattElek - Piton Saint-Leu",
-        duration: "4 mois (Avril - Juillet 2022)",
-        sector: "Cybersécurité / Audit",
-        team: "Binôme avec 1 pentester senior",
-        client: "Clients PME (secteur industriel et tertiaire)",
-        problem: "Les clients PME manquaient de visibilité sur leur niveau de sécurité réseau et système. Beaucoup de serveurs présentaient des vulnérabilités critiques dues à des configurations par défaut non sécurisées.",
-        solution: "Réalisation d'audits de sécurité pour 8 clients PME : scan de vulnérabilités avec Nessus, analyse des configurations, hardening des serveurs Linux et Windows selon les bonnes pratiques (CIS Benchmarks), mise en place de pare-feu et de politiques de sécurité.",
-        technologies: ["Nessus", "OpenVAS", "Nmap", "Metasploit", "Linux Hardening", "Windows Hardening", "iptables", "SELinux", "CIS Benchmarks"],
-        results: [
-            "8 audits de sécurité complets réalisés",
-            "150+ vulnérabilités critiques corrigées",
-            "Rédaction de 8 rapports d'audit détaillés",
-            "Hardening de 35+ serveurs (Linux et Windows)",
-            "Formation des équipes IT clients aux bonnes pratiques de sécurité"
-        ],
-        date: "Avril - Juillet 2022",
-        status: "RESOLVED",
-        severity: "HIGH",
-        github: null,
-        live: null
-    },
-};
-
-// Messages de logs variés
-const LOG_MESSAGES = [
-    { type: 'info', msg: 'service_reseau check status: OK' },
-    { type: 'info', msg: 'service_systeme check status: OK' },
-    { type: 'info', msg: 'service_cloud check status: OK' },
-    { type: 'info', msg: 'service_monitoring check status: OK' },
-    { type: 'info', msg: 'database_backup: completed successfully' },
-    { type: 'success', msg: 'health_check: all systems operational' },
-    { type: 'info', msg: 'cpu_usage: 42% (normal)' },
-    { type: 'info', msg: 'memory_usage: 67% (normal)' },
-    { type: 'info', msg: 'disk_usage: /dev/sda1 78% (OK)' },
-    { type: 'warning', msg: 'new_opportunity detected in buffer...' },
-    { type: 'info', msg: 'user_activity: page view registered' },
-    { type: 'info', msg: 'ssl_certificate: valid until 2026-12-31' },
-    { type: 'success', msg: 'security_scan: no vulnerabilities found' },
-    { type: 'info', msg: 'network_latency: 12ms (excellent)' },
-    { type: 'info', msg: 'api_response_time: 145ms (optimal)' }
-];
 
 // ============================================
 // HORLOGE LIVE
@@ -492,6 +281,11 @@ function initCPUChart() {
     const ctx = document.getElementById('cpuChart');
     if (!ctx) return;
 
+    // Détruire l'ancienne instance si elle existe (évite les fuites mémoire)
+    if (AppState.cpuChart) {
+        AppState.cpuChart.destroy();
+    }
+
     // Données initiales (20 points)
     const initialData = Array.from({ length: 20 }, () => Math.floor(Math.random() * 40) + 30);
 
@@ -513,8 +307,7 @@ function initCPUChart() {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
-            aspectRatio: 2,
+            maintainAspectRatio: false,
             animation: {
                 duration: 750
             },
@@ -569,6 +362,11 @@ function initRAMChart() {
     const ctx = document.getElementById('ramChart');
     if (!ctx) return;
 
+    // Détruire l'ancienne instance si elle existe (évite les fuites mémoire)
+    if (AppState.ramChart) {
+        AppState.ramChart.destroy();
+    }
+
     // Données initiales (20 points) - RAM entre 50% et 80%
     const initialData = Array.from({ length: 20 }, () => Math.floor(Math.random() * 30) + 50);
 
@@ -590,8 +388,7 @@ function initRAMChart() {
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
-            aspectRatio: 2,
+            maintainAspectRatio: false,
             animation: {
                 duration: 750
             },
@@ -645,6 +442,11 @@ function initRAMChart() {
 function initServicesChart() {
     const ctx = document.getElementById('servicesChart');
     if (!ctx) return;
+
+    // Détruire l'ancienne instance si elle existe (évite les fuites mémoire)
+    if (AppState.servicesChart) {
+        AppState.servicesChart.destroy();
+    }
 
     AppState.servicesChart = new Chart(ctx, {
         type: 'doughnut',
@@ -718,7 +520,7 @@ function startCPUSimulation() {
 
             chart.update('none'); // Update sans animation pour plus de fluidité
         }
-    }, 1000); // Toutes les 1 seconde
+    }, 3000); // Toutes les 3 secondes (réduit les saccades)
 }
 
 function startRAMSimulation() {
@@ -739,7 +541,7 @@ function startRAMSimulation() {
 
             chart.update('none'); // Update sans animation pour plus de fluidité
         }
-    }, 1000); // Toutes les 1 seconde
+    }, 3000); // Toutes les 3 secondes (réduit les saccades)
 }
 
 // ============================================
@@ -776,14 +578,14 @@ function addLogLine() {
 }
 
 function scrollLogsToBottom() {
-    const terminal = document.querySelector('.terminal-container');
-    if (terminal) {
-        terminal.scrollTop = terminal.scrollHeight;
+    const logsContainer = document.getElementById('logsContainer');
+    if (logsContainer) {
+        logsContainer.scrollTop = logsContainer.scrollHeight;
     }
 }
 
 function startLogsSimulation() {
-    AppState.logsIntervalId = setInterval(addLogLine, 2500); // Toutes les 2.5 secondes
+    AppState.logsIntervalId = setInterval(addLogLine, 5000); // Toutes les 5 secondes (réduit les saccades)
 }
 
 function toggleLogsPause() {
@@ -795,6 +597,107 @@ function toggleLogsPause() {
         pauseBtn.innerHTML = '<span id="pauseIcon">▶</span> RESUME';
     } else {
         pauseBtn.innerHTML = '<span id="pauseIcon">❚❚</span> PAUSE';
+    }
+}
+
+// ============================================
+// TERMINAL INTERACTIF
+// ============================================
+
+function executeTerminalCommand(command) {
+    const logsContainer = document.getElementById('logsContainer');
+    if (!logsContainer) return;
+
+    const trimmedCommand = command.trim();
+    if (!trimmedCommand) return;
+
+    // Ajouter la commande à l'historique
+    AppState.terminalHistory.push(trimmedCommand);
+    AppState.terminalHistoryIndex = AppState.terminalHistory.length;
+
+    // Afficher la commande entrée
+    const commandLine = document.createElement('div');
+    commandLine.className = 'log-line command';
+    commandLine.textContent = `root@portfolio:~$ ${trimmedCommand}`;
+    logsContainer.appendChild(commandLine);
+
+    // Parser la commande (séparer la commande et les arguments)
+    const parts = trimmedCommand.split(' ');
+    const cmd = parts[0].toLowerCase();
+    const args = parts.slice(1);
+
+    // Exécuter la commande
+    if (cmd === 'clear') {
+        // Effacer le terminal
+        logsContainer.innerHTML = '';
+        const welcomeLine = document.createElement('div');
+        welcomeLine.className = 'log-line success';
+        welcomeLine.textContent = '[SUCCESS] Terminal cleared. Tapez \'help\' pour voir les commandes disponibles.';
+        logsContainer.appendChild(welcomeLine);
+    } else if (cmd === 'echo' && args.length > 0) {
+        // Commande echo
+        const outputLine = document.createElement('div');
+        outputLine.className = 'log-line info';
+        outputLine.textContent = args.join(' ');
+        logsContainer.appendChild(outputLine);
+    } else if (cmd === 'sudo' && args[0] === 'rm' && args[1] === '-rf' && args[2] === '/') {
+        // Easter egg :)
+        const errorLine = document.createElement('div');
+        errorLine.className = 'log-line error';
+        errorLine.textContent = 'PERMISSION DENIED: Nice try hacker! 😎';
+        logsContainer.appendChild(errorLine);
+    } else if (TERMINAL_COMMANDS[cmd]) {
+        // Commande reconnue
+        const cmdConfig = TERMINAL_COMMANDS[cmd];
+        const output = cmdConfig.execute();
+
+        // Afficher chaque ligne de sortie
+        output.forEach(line => {
+            const outputLine = document.createElement('div');
+            outputLine.className = 'log-line success';
+            outputLine.textContent = line;
+            logsContainer.appendChild(outputLine);
+        });
+    } else {
+        // Commande non reconnue
+        const errorLine = document.createElement('div');
+        errorLine.className = 'log-line error';
+        errorLine.textContent = `command not found: ${cmd}. Tapez 'help' pour voir les commandes disponibles.`;
+        logsContainer.appendChild(errorLine);
+    }
+
+    // Limiter à 200 lignes
+    while (logsContainer.children.length > 200) {
+        logsContainer.removeChild(logsContainer.firstChild);
+    }
+
+    // Scroll automatique
+    scrollLogsToBottom();
+}
+
+function handleTerminalInput(e) {
+    if (e.key === 'Enter') {
+        const input = e.target;
+        const command = input.value;
+        executeTerminalCommand(command);
+        input.value = '';
+    } else if (e.key === 'ArrowUp') {
+        // Historique précédent
+        e.preventDefault();
+        if (AppState.terminalHistoryIndex > 0) {
+            AppState.terminalHistoryIndex--;
+            e.target.value = AppState.terminalHistory[AppState.terminalHistoryIndex];
+        }
+    } else if (e.key === 'ArrowDown') {
+        // Historique suivant
+        e.preventDefault();
+        if (AppState.terminalHistoryIndex < AppState.terminalHistory.length - 1) {
+            AppState.terminalHistoryIndex++;
+            e.target.value = AppState.terminalHistory[AppState.terminalHistoryIndex];
+        } else {
+            AppState.terminalHistoryIndex = AppState.terminalHistory.length;
+            e.target.value = '';
+        }
     }
 }
 
@@ -841,96 +744,112 @@ function openDrawer(triggerId) {
     const details = TRIGGER_DETAILS[triggerId];
     if (!details) return;
 
-    // Remplir le contenu
+    // Remplir le titre de manière sécurisée
     drawerTitle.textContent = details.title;
 
-    let techTagsHTML = details.technologies.map(tech =>
-        `<span class="tech-tag">${tech}</span>`
-    ).join('');
+    // Vider le contenu précédent
+    drawerBody.innerHTML = '';
 
-    let resultsHTML = details.results.map(result =>
-        `<li>${result}</li>`
-    ).join('');
+    // Section 1: Informations Générales
+    const section1 = createDrawerSection('INFORMATIONS GÉNÉRALES');
 
-    let linksHTML = '';
-    if (details.github) {
-        linksHTML += `<a href="${details.github}" target="_blank" class="drawer-link">
-            <span class="link-icon">⧉</span> Voir sur GitHub
-        </a>`;
+    section1.appendChild(createInfoRow('Type:', () => {
+        const badge = document.createElement('span');
+        badge.className = `exp-type-badge ${details.experienceType.toLowerCase()}`;
+        badge.textContent = details.experienceType.toUpperCase();
+        return badge;
+    }));
+
+    section1.appendChild(createInfoRow('Rôle:', () => {
+        const value = document.createElement('span');
+        value.className = 'info-value';
+        const strong = document.createElement('strong');
+        strong.textContent = details.role;
+        value.appendChild(strong);
+        return value;
+    }));
+
+    section1.appendChild(createInfoRow('Date:', details.date, 'mono'));
+    section1.appendChild(createInfoRow('Lieu:', details.location));
+    section1.appendChild(createInfoRow('Secteur:', details.sector));
+    section1.appendChild(createInfoRow('Équipe:', details.team));
+
+    if (details.client) {
+        section1.appendChild(createInfoRow('Client:', details.client));
     }
-    if (details.live) {
-        linksHTML += `<a href="${details.live}" target="_blank" class="drawer-link">
-            <span class="link-icon">⧉</span> Voir le projet live
-        </a>`;
+
+    section1.appendChild(createInfoRow('Statut:', () => {
+        const badge = document.createElement('span');
+        badge.className = `status-badge ${details.status === 'RESOLVED' ? 'green' : 'orange'}`;
+        badge.textContent = details.status === 'RESOLVED' ? 'TERMINÉ' : 'EN COURS';
+        return badge;
+    }));
+
+    drawerBody.appendChild(section1);
+
+    // Section 2: Contexte & Enjeux
+    const section2 = createDrawerSection('CONTEXTE & ENJEUX');
+    const problemP = document.createElement('p');
+    problemP.textContent = details.problem;
+    section2.appendChild(problemP);
+    drawerBody.appendChild(section2);
+
+    // Section 3: Missions & Réalisations
+    const section3 = createDrawerSection('MISSIONS & RÉALISATIONS');
+    const solutionsList = document.createElement('ul');
+    // Séparer les missions par point-virgule et créer une liste
+    const missions = details.solution.split(';').map(m => m.trim()).filter(m => m.length > 0);
+    missions.forEach(mission => {
+        const li = document.createElement('li');
+        // Capitaliser la première lettre
+        const capitalizedMission = mission.charAt(0).toUpperCase() + mission.slice(1);
+        li.textContent = capitalizedMission;
+        solutionsList.appendChild(li);
+    });
+    section3.appendChild(solutionsList);
+    drawerBody.appendChild(section3);
+
+    // Section 4: Technologies Utilisées
+    const section4 = createDrawerSection('TECHNOLOGIES UTILISÉES');
+    const tagsContainer = document.createElement('div');
+    tagsContainer.className = 'service-tags';
+    details.technologies.forEach(tech => {
+        const tag = document.createElement('span');
+        tag.className = 'tech-tag';
+        tag.textContent = tech;
+        tagsContainer.appendChild(tag);
+    });
+    section4.appendChild(tagsContainer);
+    drawerBody.appendChild(section4);
+
+    // Section 5: Résultats & Impact
+    const section5 = createDrawerSection('RÉSULTATS & IMPACT');
+    const resultsList = document.createElement('ul');
+    details.results.forEach(result => {
+        const li = document.createElement('li');
+        li.textContent = result;
+        resultsList.appendChild(li);
+    });
+    section5.appendChild(resultsList);
+    drawerBody.appendChild(section5);
+
+    // Section 6: Liens (si disponibles)
+    if (details.github || details.live) {
+        const section6 = document.createElement('div');
+        section6.className = 'drawer-section';
+
+        if (details.github) {
+            const githubLink = createDrawerLink('⧉', 'Voir sur GitHub', details.github);
+            section6.appendChild(githubLink);
+        }
+
+        if (details.live) {
+            const liveLink = createDrawerLink('⧉', 'Voir le projet live', details.live);
+            section6.appendChild(liveLink);
+        }
+
+        drawerBody.appendChild(section6);
     }
-
-    drawerBody.innerHTML = `
-        <div class="drawer-section">
-            <h3>INFORMATIONS GÉNÉRALES</h3>
-            <div class="info-row">
-                <span class="info-label">Type:</span>
-                <span class="exp-type-badge ${details.experienceType.toLowerCase()}">${details.experienceType.toUpperCase()}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Rôle:</span>
-                <span class="info-value"><strong>${details.role}</strong></span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Date:</span>
-                <span class="info-value mono">${details.date}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Lieu:</span>
-                <span class="info-value">${details.location}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Secteur:</span>
-                <span class="info-value">${details.sector}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">Équipe:</span>
-                <span class="info-value">${details.team}</span>
-            </div>
-            ${details.client ? `
-            <div class="info-row">
-                <span class="info-label">Client:</span>
-                <span class="info-value">${details.client}</span>
-            </div>
-            ` : ''}
-            <div class="info-row">
-                <span class="info-label">Statut:</span>
-                <span class="status-badge ${details.status === 'RESOLVED' ? 'green' : 'orange'}">
-                    ${details.status === 'RESOLVED' ? 'TERMINÉ' : 'EN COURS'}
-                </span>
-            </div>
-        </div>
-
-        <div class="drawer-section">
-            <h3>PROBLÈME IDENTIFIÉ</h3>
-            <p>${details.problem}</p>
-        </div>
-
-        <div class="drawer-section">
-            <h3>SOLUTION IMPLÉMENTÉE (RCA)</h3>
-            <p>${details.solution}</p>
-        </div>
-
-        <div class="drawer-section">
-            <h3>TECHNOLOGIES UTILISÉES</h3>
-            <div class="service-tags">
-                ${techTagsHTML}
-            </div>
-        </div>
-
-        <div class="drawer-section">
-            <h3>RÉSULTATS & IMPACT</h3>
-            <ul>
-                ${resultsHTML}
-            </ul>
-        </div>
-
-        ${linksHTML ? `<div class="drawer-section">${linksHTML}</div>` : ''}
-    `;
 
     // Ouvrir avec animation GSAP
     drawer.classList.add('active');
@@ -962,6 +881,54 @@ function openDrawer(triggerId) {
     );
 }
 
+// Fonctions utilitaires pour créer des éléments de manière sécurisée
+function createDrawerSection(title) {
+    const section = document.createElement('div');
+    section.className = 'drawer-section';
+    const h3 = document.createElement('h3');
+    h3.textContent = title;
+    section.appendChild(h3);
+    return section;
+}
+
+function createInfoRow(label, value, valueClass = '') {
+    const row = document.createElement('div');
+    row.className = 'info-row';
+
+    const labelSpan = document.createElement('span');
+    labelSpan.className = 'info-label';
+    labelSpan.textContent = label;
+    row.appendChild(labelSpan);
+
+    if (typeof value === 'function') {
+        row.appendChild(value());
+    } else {
+        const valueSpan = document.createElement('span');
+        valueSpan.className = `info-value ${valueClass}`;
+        valueSpan.textContent = value;
+        row.appendChild(valueSpan);
+    }
+
+    return row;
+}
+
+function createDrawerLink(icon, text, href) {
+    const link = document.createElement('a');
+    link.href = href;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.className = 'drawer-link';
+
+    const iconSpan = document.createElement('span');
+    iconSpan.className = 'link-icon';
+    iconSpan.textContent = icon;
+    link.appendChild(iconSpan);
+
+    link.appendChild(document.createTextNode(' ' + text));
+
+    return link;
+}
+
 function closeDrawer() {
     const drawer = document.getElementById('triggerDrawer');
 
@@ -981,16 +948,55 @@ function closeDrawer() {
 }
 
 // ============================================
+// BURGER MENU (MOBILE)
+// ============================================
+
+function toggleBurgerMenu() {
+    const sidebar = document.querySelector('.sidebar');
+    const burgerBtn = document.getElementById('burgerBtn');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    sidebar.classList.toggle('mobile-open');
+    burgerBtn.classList.toggle('active');
+    overlay.classList.toggle('active');
+}
+
+function closeBurgerMenu() {
+    const sidebar = document.querySelector('.sidebar');
+    const burgerBtn = document.getElementById('burgerBtn');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    sidebar.classList.remove('mobile-open');
+    burgerBtn.classList.remove('active');
+    overlay.classList.remove('active');
+}
+
+// ============================================
 // EVENT LISTENERS
 // ============================================
 
 function setupEventListeners() {
+    // Burger Menu
+    const burgerBtn = document.getElementById('burgerBtn');
+    if (burgerBtn) {
+        burgerBtn.addEventListener('click', toggleBurgerMenu);
+    }
+
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    if (sidebarOverlay) {
+        sidebarOverlay.addEventListener('click', closeBurgerMenu);
+    }
+
     // Navigation
     document.querySelectorAll('.nav-item').forEach(item => {
         item.addEventListener('click', (e) => {
             e.preventDefault();
             const viewName = item.dataset.view;
             navigateToView(viewName);
+            // Fermer le menu burger sur mobile après navigation
+            if (window.innerWidth <= 768) {
+                closeBurgerMenu();
+            }
         });
     });
 
@@ -1004,9 +1010,19 @@ function setupEventListeners() {
 
     // Lignes triggers (ouvrir drawer)
     document.querySelectorAll('.trigger-row').forEach(row => {
+        // Click event
         row.addEventListener('click', () => {
             const triggerId = row.dataset.trigger;
             openDrawer(triggerId);
+        });
+
+        // Keyboard navigation (Enter & Space)
+        row.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault(); // Empêcher le scroll sur Space
+                const triggerId = row.dataset.trigger;
+                openDrawer(triggerId);
+            }
         });
     });
 
@@ -1025,6 +1041,12 @@ function setupEventListeners() {
     const pauseLogsBtn = document.getElementById('pauseLogsBtn');
     if (pauseLogsBtn) {
         pauseLogsBtn.addEventListener('click', toggleLogsPause);
+    }
+
+    // Terminal interactif
+    const terminalInput = document.getElementById('terminalInput');
+    if (terminalInput) {
+        terminalInput.addEventListener('keydown', handleTerminalInput);
     }
 }
 
@@ -1115,14 +1137,50 @@ function animateSidebarElements() {
 }
 
 // ============================================
+// EXPOSITION DES FONCTIONS GLOBALES
+// ============================================
+
+// Exposer navigateToView pour les boutons onclick dans le HTML
+window.navigateToView = navigateToView;
+
+// ============================================
+// GESTION D'ERREURS GLOBALE
+// ============================================
+
+// Gestion des erreurs non capturées
+window.addEventListener('error', (event) => {
+    console.error('[ERROR] Erreur non capturée:', event.error);
+    // Optionnel : afficher un message à l'utilisateur
+    // showErrorMessage('Une erreur est survenue. Veuillez recharger la page.');
+});
+
+// Gestion des promesses rejetées non capturées
+window.addEventListener('unhandledrejection', (event) => {
+    console.error('[ERROR] Promise rejetée non gérée:', event.reason);
+});
+
+// ============================================
 // DÉMARRAGE
 // ============================================
 
 // Attendre que le DOM soit chargé
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', () => {
+        try {
+            init();
+        } catch (error) {
+            console.error('[ERROR] Erreur lors de l\'initialisation:', error);
+            // Fallback : afficher au moins le contenu de base
+            document.body.classList.add('error-state');
+        }
+    });
 } else {
-    init();
+    try {
+        init();
+    } catch (error) {
+        console.error('[ERROR] Erreur lors de l\'initialisation:', error);
+        document.body.classList.add('error-state');
+    }
 }
 
 // ============================================
